@@ -143,7 +143,7 @@ async def main():
                     galat_terakhir = e
         raise galat_terakhir or RuntimeError("Tidak ada grup laporan yang valid.")
 
-    if not grup_sumber:
+    if not kandidat_sumber:
         print(f"❌ Grup sumber '{TARGET_GROUP_SUMBER}' tidak ditemukan!")
         return False
     if not kandidat_laporan:
