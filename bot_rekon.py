@@ -116,6 +116,7 @@ async def main():
         nama = (dialog.name or "").strip().lower()
         if TARGET_GROUP_SUMBER.lower() in nama:
             grup_sumber = dialog.input_entity
+            print(f"   📌 Grup sumber cocok: '{dialog.name}', id={dialog.id}")
         if TARGET_GROUP_LAPORAN.lower() in nama:
             kandidat_laporan.append(dialog)
 
@@ -168,7 +169,11 @@ async def main():
         ada_tanda = any(t in teks_cek for t in ["✅", "✔", "👍", "👌", "done"])
         if (ada_reaksi_valid(message) or ada_tanda) and message.grouped_id:
             album_sukses.add(message.grouped_id)
-
+    print(f"🔎 Total pesan terbaca: {len(semua_pesan)}")
+    for m in semua_pesan[:5]:
+        print("   -", m.date.astimezone(WIB).strftime('%d-%m %H:%M'),
+              repr((m.text or '')[:100]), repr(m.file.name if m.file else None))
+        
     # Tahap 2: ekstrak SC & tentukan status (pesan dibaca dari terbaru ke terlama)
     status_mentah = {}
     for message in semua_pesan:
