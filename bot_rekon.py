@@ -173,7 +173,7 @@ async def main():
     for m in semua_pesan[:5]:
         print("   -", m.date.astimezone(WIB).strftime('%d-%m %H:%M'),
               repr((m.text or '')[:100]), repr(m.file.name if m.file else None))
-        
+              
     # Tahap 2: ekstrak SC & tentukan status (pesan dibaca dari terbaru ke terlama)
     status_mentah = {}
     for message in semua_pesan:
