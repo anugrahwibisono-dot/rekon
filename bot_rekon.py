@@ -110,12 +110,12 @@ async def main():
     print("🚀 Menghubungkan ke Telegram...")
     dialogs = await client.get_dialogs()
 
-    grup_sumber = None
+    kandidat_sumber = []
     kandidat_laporan = []
     for dialog in dialogs:
         nama = (dialog.name or "").strip().lower()
         if TARGET_GROUP_SUMBER.lower() in nama:
-            grup_sumber = dialog.input_entity
+            kandidat_sumber.append(dialog.input_entity)
             print(f"   📌 Grup sumber cocok: '{dialog.name}', id={dialog.id}")
         if TARGET_GROUP_LAPORAN.lower() in nama:
             kandidat_laporan.append(dialog)
@@ -157,7 +157,17 @@ async def main():
     semua_pesan = []
     album_sukses = set()
 
-    async for message in client.iter_messages(grup_sumber):
+    async def iter_semua():
+        for g in kandidat_sumber:
+            try:
+                async for m in client.iter_messages(g):
+                    if m.date.astimezone(WIB).date() < start_date:
+                        break
+                    yield m
+            except Exception as e:
+                print(f"   ⚠️ Gagal baca satu grup sumber: {e}")
+
+    async for message in iter_semua():
         if type(message).__name__ == 'MessageService':
             continue
         if message.date.astimezone(WIB).date() < start_date:
