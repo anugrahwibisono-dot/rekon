@@ -1,0 +1,25 @@
+name: Rekon Bot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  jalankan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Pasang library
+        run: pip install telethon requests
+
+      - name: Jalankan bot
+        env:
+          API_ID: ${{ secrets.TG_API_ID }}
+          API_HASH: ${{ secrets.TG_API_HASH }}
+          TG_SESSION_STRING: ${{ secrets.TG_SESSION_STRING }}
+          WEB_APP_URL: ${{ secrets.WEB_APP_URL }}
+        run: python bot_rekon.py
