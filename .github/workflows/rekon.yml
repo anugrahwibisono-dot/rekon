@@ -2,8 +2,8 @@ name: Rekon Bot
 
 on:
   workflow_dispatch:
-    schedule:
-    - cron: "0 0 * * *"
+  schedule:
+    - cron: "40 9 * * *"
 
 jobs:
   jalankan:
