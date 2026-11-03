@@ -23,6 +23,13 @@ TARGET_GROUP_SUMBER = "GUDANG SO BLIMBING NEW"
 TARGET_GROUP_LAPORAN = "TEST BOT GUDANG BLIMBING"
 TANGGAL_AWAL = date(2026, 10, 29)  # Data diambil dari tanggal ini SAMPAI HARI INI
 
+# Pesan dari ID ini diabaikan (bot, admin, petugas rekap)
+ID_DIKECUALIKAN = {
+    9228868651,  # Bot Rekon Blimbing
+    127114788,   # WH SO BLB | JAKIK
+    7983503908,  # nana
+    123565033,   # WH SO BLB ANUGRAH
+}
 BATCH_SIZE = 50
 TIMEOUT_REQUEST = 60
 MAKS_PERCOBAAN = 3
@@ -162,6 +169,10 @@ async def main():
                 print(f"   ⚠️ Gagal baca satu grup sumber: {e}")
 
     async for message in iter_semua():
+        if type(message).__name__ == 'MessageService':
+            continue
+        if message.sender_id in ID_DIKECUALIKAN:
+            continueasync for message in iter_semua():
         if type(message).__name__ == 'MessageService':
             continue
         if message.date.astimezone(WIB).date() < start_date:
