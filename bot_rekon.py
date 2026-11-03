@@ -2,7 +2,7 @@ import asyncio
 import os
 import re
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, date, timezone, timedelta
 
 import requests
 from telethon import TelegramClient
@@ -21,7 +21,7 @@ WEB_APP_URL = os.environ["WEB_APP_URL"]
 
 TARGET_GROUP_SUMBER = "GUDANG SO BLIMBING NEW"  
 TARGET_GROUP_LAPORAN = "TEST BOT GUDANG BLIMBING"
-TANGGAL_MULAI = 16  # Data diambil dari tanggal ini SAMPAI HARI INI
+TANGGAL_AWAL = date(2026, 10, 29)  # Data diambil dari tanggal ini SAMPAI HARI INI
 
 BATCH_SIZE = 50
 TIMEOUT_REQUEST = 60
@@ -42,14 +42,8 @@ EMOJI_NEGATIF = {"👎", "❌", "✖", "✖️"}
 # FUNGSI BANTU
 # ==========================================
 def hitung_rentang_tanggal():
-    """(tanggal_mulai, hari_ini). Jika hari ini < TANGGAL_MULAI, mundur ke bulan sebelumnya."""
-    hari_ini = datetime.now(WIB).date()
-    if hari_ini.day >= TANGGAL_MULAI:
-        mulai = hari_ini.replace(day=TANGGAL_MULAI)
-    else:
-        akhir_bulan_lalu = hari_ini.replace(day=1) - timedelta(days=1)
-        mulai = akhir_bulan_lalu.replace(day=min(TANGGAL_MULAI, akhir_bulan_lalu.day))
-    return mulai, hari_ini
+    """(tanggal_mulai, hari_ini) dengan tanggal mulai tetap."""
+    return TANGGAL_AWAL, datetime.now(WIB).date()
 
 
 def is_valid_sc(sc):
@@ -231,7 +225,7 @@ async def main():
     # Tahap 3: kirim laporan ke grup Telegram
     print(f"📢 Mengirim laporan rekap ke grup '{TARGET_GROUP_LAPORAN}'...")
     try:
-        judul = f"📋 **LAPORAN REKON OTOMATIS (Tgl {TANGGAL_MULAI} s.d Hari Ini)**\n\n"
+        judul = f"📋 **LAPORAN REKON OTOMATIS (Tgl {TANGGAL_AWAL.strftime('%d-%m-%Y')} s.d Hari Ini)**\n\n"
         if list_belum_rekon:
             chunk = judul + "⚠️ **Belum Rekon:**\n"
             for idx, sc in enumerate(list_belum_rekon, 1):
