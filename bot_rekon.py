@@ -173,6 +173,21 @@ async def main():
         ada_tanda = any(t in teks_cek for t in ["✅", "✔", "👍", "👌", "done"])
         if (ada_reaksi_valid(message) or ada_tanda) and message.grouped_id:
             album_sukses.add(message.grouped_id)
+        from collections import Counter
+    hitung = Counter()
+    nama_pengirim = {}
+    for m in semua_pesan:
+        sid = m.sender_id
+        hitung[sid] += 1
+        if sid not in nama_pengirim:
+            s = m.sender
+            nama_pengirim[sid] = (
+                " ".join(filter(None, [getattr(s, 'first_name', None), getattr(s, 'last_name', None)]))
+                or getattr(s, 'title', None) or getattr(s, 'username', None) or "?"
+            )
+    print("👥 Daftar pengirim:")
+    for sid, jml in hitung.most_common():
+        print(f"   - id={sid} | {nama_pengirim[sid]} | {jml} pesan")        
     print(f"🔎 Total pesan terbaca: {len(semua_pesan)}")
     for m in semua_pesan[:5]:
         print("   -", m.date.astimezone(WIB).strftime('%d-%m %H:%M'),
