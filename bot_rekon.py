@@ -172,8 +172,6 @@ async def main():
         if type(message).__name__ == 'MessageService':
             continue
         if message.sender_id in ID_DIKECUALIKAN:
-            continueasync for message in iter_semua():
-        if type(message).__name__ == 'MessageService':
             continue
         if message.date.astimezone(WIB).date() < start_date:
             break
